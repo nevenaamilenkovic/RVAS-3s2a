@@ -1,0 +1,41 @@
+﻿@model List<Tsql3s2a.Models.Supplier>
+@{
+	ViewData["Title"] = "Lista dobavljaca";
+}
+
+<h3>Lista dobavljaca</h3>
+
+<table class="table">
+	<thead>
+		<tr>
+			<td>Supplierid</td>
+			<td>Companyname</td>
+			<td>Contactname</td>
+			<td>Contacttitle</td>
+			<td>Address</td>
+			<td>City</td>
+			<td>Region</td>
+			<td>Postalcode</td>
+			<td>Country</td>
+			<td>Phone</td>
+			<td>Fax</td>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var s in Model){
+			<tr>
+				<td>@s.Supplierid</td>
+				<td>@s.Companyname</td>
+				<td>@s.Contactname</td>
+				<td>@s.Contacttitle</td>
+				<td>@s.Address</td>
+				<td>@s.City</td>
+				<td>@s.Region</td>
+				<td>@s.Postalcode</td>
+				<td>@s.Country</td>
+				<td>@s.Phone</td>
+				<td>@s.Fax</td>
+			</tr>
+		}
+	</tbody>
+</table>
