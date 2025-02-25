@@ -1,0 +1,52 @@
+﻿@model List<Tsql3s2a.Models.Supplier>
+@{
+    ViewData["Title"] = "Lista dobavljaca";
+}
+
+<h3>Lista svih dobavljaca</h3>
+
+<br />
+<a asp-action="Create" class="btn btn-success">Dodaj novog dobavljaca</a>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Supplierid</th>
+            <th>Companyname</th>
+            <th>Contactname</th>
+            <th>Contacttitle</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>Region</th>
+            <th>Postalcode</th>
+            <th>Country</th>
+            <th>Phone</th>
+            <th>Fax</th>
+            <th>Opcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Supplierid</td>
+                <td>@s.Companyname</td>
+                <td>@s.Contactname</td>
+                <td>@s.Contacttitle</td>
+                <td>@s.Address</td>
+                <td>@s.City</td>
+                <td>@s.Region</td>
+                <td>@s.Postalcode</td>
+                <td>@s.Country</td>
+                <td>@s.Phone</td>
+                <td>@s.Fax</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@s.Supplierid" class="btn btn-warning">Izmeni</a>
+                    <a asp-action="Delete" asp-route-id="@s.Supplierid" class="btn btn-danger">Obrisi</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

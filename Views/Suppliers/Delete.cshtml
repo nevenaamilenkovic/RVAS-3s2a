@@ -1,0 +1,44 @@
+﻿@model Tsql3s2a.Models.ViewModels.SupplierViewModel
+@{
+    ViewData["Title"] = "Brisanje dobavljaca";
+}
+
+<h3>Da li ste sigurni da zelite da obrisete suppliera?</h3>
+
+<p>@Model.Supplier.Companyname</p>
+
+@if (Model.Products.Any())
+{
+    <h4>Supplier je povezan sa sledecim proizvodima:</h4>
+
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th>Product Id</th>
+                <th>Product Name</th>
+                <th>Unitprice</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var p in Model.Products)
+            {
+                <tr>
+                    <td>@p.Productid</td>
+                    <td>@p.Productname</td>
+                    <td>@p.Unitprice</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p class="text-danger">Napomena: Brisanje ovog suppliera nije dozvoljeno</p>
+}
+
+<form asp-for="Delete" method="post">
+    @if (!Model.Products.Any())
+    {
+        <button type="submit" class="btn btn-danger">Potvrdi brisanje</button>
+    }
+    <a href="@Url.Action("Index")" class="btn btn-warning">Nazad na listu</a>
+    <input type="hidden" asp-for="Supplier.Supplierid" />
+</form>
