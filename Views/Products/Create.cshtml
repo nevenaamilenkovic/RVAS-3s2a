@@ -1,0 +1,44 @@
+﻿@model Tsql3s2a.Models.ViewModels.ProuctViewModel
+@{
+    ViewData["Title"] = "Dodaj novi proizvod";
+}
+
+<h2>Dodaj novi proizvod</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Productname" class="form-label"></label>
+        <input asp-for="Productname" class="form-control"/>
+        <span asp-validation-for="Productname" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Categoryid" class="form-label">Kategorija:</label>
+        <select asp-for ="Categoryid" asp-items="Model.Categories" class="form-select">
+            <option value="">-- Izaberi kategoriju --</option>
+        </select>
+        <span asp-validation-for="Categoryid" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Supplierid" class="form-label">Dobavljac:</label>
+        <select asp-for="Supplierid" asp-items="Model.Suppliers" class="form-select">
+            <option value="">-- Izaberi dobavljaca --</option>
+        </select>
+        <span asp-validation-for="Supplierid" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Unitprice" class="form-label"></label>
+        <input type="number" asp-for="Unitprice" class="form-control" />
+        <span asp-validation-for="Unitprice" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <input asp-for="Discontinued" class="form-check-input" />
+        <label asp-for="Discontinued" class="form-label">Da li je proizvod povucen iz prodaje?</label>
+    </div>
+
+    <button type="submit" class="btn btn-success">Dodaj</button>
+
+</form>
