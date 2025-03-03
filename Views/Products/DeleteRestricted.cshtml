@@ -1,0 +1,37 @@
+﻿@* Uzimamo podatke sa ViewData koji su prosledjeni sa kontrolera za proizvod koji ne moze da se brise i naravno listu narudzbina u kojima je taj neki proizvod sadrzan *@
+@{
+    var product = ViewData["Product"] as Tsql3s2a.Models.Product;
+    var orders = ViewData["Orders"] as List<Tsql3s2a.Models.Order>;
+}
+
+@{
+    ViewData["Title"] = "Brisanje nije moguće";
+}
+
+<h2>Brisanje nije moguće</h2>
+
+<p>Proizvod <strong>@product.Productname</strong> ne može biti obrisan jer je povezan sa sledećim narudžbinama:</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID narudžbine</th>
+            <th>Datum</th>
+            <th>Kupac</th>
+        </tr>
+    </thead>
+    <tbody>
+        @* Prolazimo kroz sve narudzbine u listi orders i prikazujemo ih u tabeli *@
+        @foreach (var order in orders)
+        {
+            <tr>
+                <td>@order.Orderid</td>
+                @* Za datum moramo da koristimo metodu ToShortDateString da bismo prikazali orderdate u kracem formatu mesec-dan-godina bez vremena kada je order kreiran  @order.Orderdate.ToString("dd/MM/yyyy") *@
+                <td>@order.Orderdate.ToShortDateString()</td>
+                <td>@order.Custid</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-primary">Nazad na listu proizvoda</a>

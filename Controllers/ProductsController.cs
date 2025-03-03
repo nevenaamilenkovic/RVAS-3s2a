@@ -1,9 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Numerics;
+using System;
+using System.Runtime.Intrinsics.Arm;
+using System.Xml.Linq;
 using Tsql3s2a.Data;
 using Tsql3s2a.Models;
 using Tsql3s2a.Models.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tsql3s2a.Controllers
 {
@@ -128,7 +134,45 @@ namespace Tsql3s2a.Controllers
             return View(model);
         }
 
+        //nismo stigli na terminu 3
+        //action name je opciona stvar sad, ja ga dodajem iz navike
+        [HttpPost,ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        //metoda prima id proizvoda koji se brise
+        public async Task<IActionResult>DeleteConfirmed(int id)
+        {
+            //pre nego pocnemo sa brisanjem potrebno je da simuliramo sql join tabele orderDetails i orders
+            var p = await _context.Products
+                .Include(p=>p.OrderDetails)
+                .ThenInclude(od=>od.Order)
+                .FirstOrDefaultAsync(p=>p.Productid == id);
 
+            //ukoliko proizvod sa tim id-jem ne postoji vracamo gresku
+            if (p == null) return NotFound();
+
+            //Dalje proveravamo da li proizvod ima povezane narudzbine
+            //p.OrderDetails je lista objekata koja predstavlja sve stavke narudzbine povezane sa nekim proizvodom
+            //Any() je Linq metoda koja proverava da li kolekcija OrderDetails sadrzi bilo kakve elemente, odnosno da li je povezana sa proizvodom koji zelimo da brisemo, ako jeste uslov je true i vracaju se testavke narudzbine
+            if (p.OrderDetails.Any())
+            {
+                //Ukoliko ima povezanih narudzbina, dalje moramo da koristimo ViewData objekat da bismo prosledili podatke iz kontrolera u View
+                //Stavljamo proizvod p odnosno instancu klase Product u ViewData tako da ga mozemo koristiti u Viewu
+                ViewData["Product"] = p;
+                //Ovde isto radimo sto i sa proizvodom, samo sto prosledjujemo samo detalje o orderu na osnovu svih OrderDetailsa
+                ViewData["Orders"] = p.OrderDetails.Select(od => od.Order).ToList();
+                //Ukoliko je proizvod povezan sa nekim narudzbimana vracamo view pod nazivom “DeleteRestricted”
+                return View("DeleteRestricted");
+            }
+
+
+            //Naravo ako proizvod nema povezane narudzbine mozemo slobodno da ga obrisemo iz tabele i osvezimo stranicu sa listom proizvoda
+            _context.Products.Remove(p);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        //Da bi mogli odmah da brisemo proizvode sa indeksa moramo da dodamo opciju za Delete u Products/index
+        //Pravimo formu koja salje post zahtev kontroleru za brisanje proizvoda u viewu deleteRestricted
 
 
     }
